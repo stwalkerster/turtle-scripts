@@ -1,5 +1,5 @@
 local length = 16;
-local width = 16;
+local width = 8;
 local depth = 16;
 
 --[[ area to be mined:
@@ -42,6 +42,24 @@ end
 
 tlDigForward();
 
-for l = 0, length do
+for w = 0, width do
+
+	for l = 0, length do
+		tlDigForward();
+	end
+
+	turtle.turnRight();
 	tlDigForward();
+	turtle.turnRight();
+
+	for l = 0, length do
+		tlDigForward();
+	end
+
+	turtle.turnLeft();
+	tlDigForward();
+	turtle.turnLeft();
+
+	w = w + 1;
+
 end
