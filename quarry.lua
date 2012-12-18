@@ -31,9 +31,21 @@ function tlDig()
 	end
 end
 
+function tlDigDown()	
+	while turtle.detectDown() do
+		turtle.digDown();
+	end
+end
+
 function tlDigForward()
 	while not turtle.forward() do
 		tlDig();
+	end
+end
+
+function tlDigDown()
+	while not turtle.down() do
+		tlDigDown();
 	end
 end
 
@@ -42,24 +54,35 @@ end
 
 tlDigForward();
 
-for w = 0, width do
+-- start the quarry.
 
-	for l = 0, length do
+for d = 0, depth do
+
+	for w = 0, width do
+
+		for l = 0, length do
+			tlDigForward();
+		end
+
+		turtle.turnRight();
 		tlDigForward();
-	end
+		turtle.turnRight();
 
-	turtle.turnRight();
-	tlDigForward();
-	turtle.turnRight();
+		for l = 0, length do
+			tlDigForward();
+		end
 
-	for l = 0, length do
+		turtle.turnLeft();
 		tlDigForward();
+		turtle.turnLeft();
 	end
 
 	turtle.turnLeft();
-	tlDigForward();
-	turtle.turnLeft();
+	for w = 0, width do
+		tlDigForward();
+		tlDigForward();
+	end
 
-	w = w + 1;
-
+	tlDigDown();
+	
 end
