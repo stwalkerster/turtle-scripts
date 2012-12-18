@@ -83,6 +83,8 @@ for d = 0, depth do
 		tlDigForward();
 	end
 
+	turtle.turnRight();
+	
 	tlDigDown();
 	
 end
