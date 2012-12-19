@@ -1,6 +1,6 @@
-local length = 16;
-local width = 8;
-local depth = 16;
+local length = 16; -- how far back to go minus 2
+local width = 8; -- how wide minus 2, div 2
+local depth = 16; -- how many levels (broken)
 
 --[[ area to be mined:
 
