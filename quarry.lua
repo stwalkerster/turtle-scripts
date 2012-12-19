@@ -52,7 +52,7 @@ end
 	
 -- lets' move the turtle to the first square
 
-tlDigForward();
+-- tlDigForward();
 
 -- start the quarry.
 
