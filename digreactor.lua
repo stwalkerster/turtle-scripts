@@ -4,7 +4,6 @@ local depth = 10; -- how many levels minus 1
 
 --[[ area to be mined:
 
-  ****************
 	****************
 	****************
 	****************
@@ -20,7 +19,7 @@ local depth = 10; -- how many levels minus 1
 	****************
 	****************
 	****************
-	X
+	X***************
 	
 	place turtle on the X. ]]
 
