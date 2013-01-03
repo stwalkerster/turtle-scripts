@@ -1,6 +1,8 @@
 local length = 14; -- how far back to go minus 2
 local width = 7; -- how wide minus 2, div 2
-local depth = 3; -- how many levels (broken)
+local depth = 1; -- how many levels
+
+local steps = 0;
 
 --[[ area to be mined:
 
@@ -10,17 +12,7 @@ local depth = 3; -- how many levels (broken)
 	****************
 	****************
 	****************
-	****************
-	****************
-	****************
-	****************
-	****************
-	****************
-	****************
-	****************
-	****************
-	****************
-	X
+	X****************
 	
 	place turtle on the X. ]]
 
@@ -31,7 +23,22 @@ function writeline(data)
 	oldx, oldy = term.getCursorPos()
 	term.setCursorPos(1,oldy)
 end
+
+function updateStats()
+	local oldx,oldy = term.getCursorPos()
 	
+	term.write("x: ?")
+	term.setCursorPos(1,oldy+1);
+	term.write("y: ?")
+	term.setCursorPos(1,oldy+2);
+	term.write("z: ?")
+	term.setCursorPos(1,oldy+3);
+	term.write("fuel: " .. turtle.getFuelLevel())
+	term.setCursorPos(1,oldy+4);
+	term.write("steps: " .. steps)
+	term.setCursorPos(1,oldy);
+end
+
 function tlDig()	
 	while turtle.detect() do
 		turtle.dig();
@@ -50,9 +57,11 @@ function tlDigForward()
 
 	while not moved do
 		if turtle.detect() then
+			-- block in my way
 			tlDig();
 			moved = turtle.forward()
 		elseif turtle.getFuelLevel() == 0 then
+			-- out of fuel
 			turtle.select(1);
 			turtle.refuel();
 			if turtle.getFuelLevel() == 0 then
@@ -64,9 +73,14 @@ function tlDigForward()
 			
 			moved = turtle.forward();
 		else
+			-- player / npc?
 			moved = turtle.forward();
 		end
 	end
+	
+	steps = steps + 1
+	
+	updateStats();
 end
 
 function tlDigDown()
@@ -75,17 +89,31 @@ function tlDigDown()
 	end
 end
 
-	
+function fuelConsumption(length, width, depth)
+	return ((((length + 1)* ((width*2)+2)) + width) * depth)
+end
+
 -- lets' move the turtle to the first square
 
 -- tlDigForward();
 
 -- start the quarry.
+term.clear();
+term.setCursorPos(1,1);
+
+writeline("I will need " .. fuelConsumption(length, width, depth) .. " units of fuel.")
+writeline("I currently have " .. turtle.getFuelLevel() .. " units of fuel.")
+writeline("Starting operation in " .. (length + 2) .. "x" .. depth .. "x" .. ((width*2)+1) .. " area")
+
+if fuelConsumption(length, width, depth) > turtle.getFuelLevel() then
+	turtle.refuel()	
+	writeline("After refuelling, I have " .. turtle.getFuelLevel() .. " units of fuel.")
+end
 
 for d = 0, depth do
 
 	for w = 0, width do
-		writeline( "w = " .. w );
+		
 		for l = 0, length do
 			tlDigForward();
 		end
