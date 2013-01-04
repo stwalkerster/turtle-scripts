@@ -1,6 +1,6 @@
 local length = 14; -- how far back to go minus 2
 local width = 7; -- how wide minus 2, div 2
-local depth = 2; -- how many levels minus 1
+local depth = 1; -- how many levels minus 1
 
 local steps = 0;
 
