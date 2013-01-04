@@ -1,5 +1,12 @@
 m=peripheral.wrap("top")
 
+local x,y,z,f,stage
+x=""
+y=""
+z=""
+f=""
+stage="unknown"
+
 local sOpenedSide = nil
 local function open()
 	local bOpen, sFreeSide = false, nil
@@ -28,16 +35,32 @@ end
 
 open()
 
-function updateScreen(x,y,z,fuel)
+function updateScreen(ux,uy,uz,ufuel,e,ustage)
+	e2 = ""
+	if ux == nil then ux = "?" e[2]="Data x failure" end
+	if uy == nil then uy = "?" e[2]="Data y failure"  end
+	if uz == nil then uz = "?" e[2]="Data z failure"  end
+	if ufuel == nil then ufuel = "?" e[2]="Data f failure"  end
+	if ustage == nil then ustage = "?" e[2]="Data s failure"  end
+
 	m.clear()
 	m.setCursorPos(1,1)
-	m.write("X: " .. x);
-	m.setCursorPos(1,2)
-	m.write("Y: " .. y);
+	m.write("turtle01 - Current Position");
 	m.setCursorPos(1,3)
-	m.write("Z: " .. z);
+	m.write("X: " .. ux);
+	m.setCursorPos(1,4)
+	m.write("Y: " .. uy);
 	m.setCursorPos(1,5)
-	m.write("Fuel: " .. fuel);
+	m.write("Z: " .. uz);
+	m.setCursorPos(1,7)
+	m.write("Fuel: " .. ufuel);
+	m.setCursorPos(1,9)
+	m.write("Stage: " .. ustage);
+	m.setCursorPos(1,11)
+	m.write(e[1]);	
+	m.setCursorPos(1,12)
+	m.write(e[2]);
+	
 	
 	
 end
@@ -46,9 +69,18 @@ while true do
 	senderid, message, distance = rednet.receive(3);
 
 	if senderid == nil then 
-		updateScreen("?","?","?","?")
+		updateScreen(x.."?",y.."?",z.."?",f.."?",{"Turtle not broadcasting /","                 out of range"}, stage)
 	else
 		t = textutils.unserialize(message)
-		updateScreen(t[1],t[2],t[3],t[4])
+		if t ~= nil then
+			x = t[1]
+			y = t[2]
+			z = t[3]
+			f = t[4]
+			stage = t[5]
+			updateScreen(x,y,z,f,"", stage)
+		else
+			updateScreen(x.."?",y.."?",z.."?",f.."?",{"Data decode failure."}, stage)
+		end
 	end
 end
