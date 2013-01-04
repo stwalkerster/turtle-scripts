@@ -19,6 +19,38 @@ local _term_position=1;
 	place turtle on the X. ]]
 
 -- various functions to be used
+local sOpenedSide = nil
+local function open()
+	local bOpen, sFreeSide = false, nil
+	for n,sSide in pairs(rs.getSides()) do	
+		if peripheral.getType( sSide ) == "modem" then
+			sFreeSide = sSide
+			if rednet.isOpen( sSide ) then
+				bOpen = true
+				break
+			end
+		end
+	end
+	
+	if not bOpen then
+		if sFreeSide then
+			rednet.open( sFreeSide )
+			sOpenedSide = sFreeSide
+			return true
+		else
+			print( "No modem attached" )
+			return false
+		end
+	end
+	return true
+end
+
+function close()
+	if sOpenedSide then
+		rednet.close( sOpenedSide )
+	end
+end
+
 function writeline(data)
 	term.write(data);
 	term.scroll(1);
@@ -37,6 +69,17 @@ function updateStats()
 	term.setCursorPos(1,_term_position+4);
 	term.write("steps: " .. steps)
 	term.setCursorPos(1,_term_position);
+end
+
+function broadcastLocation()
+	x, y, z = gps.locate(2,false)
+	if x == nil then
+		x="?"
+		y="?"
+		z="?"
+	end
+	
+	rednet.send(8, textutils.serialize({x,y,z, turtle.getFuelLevel()});
 end
 
 function tlDig()	
@@ -81,6 +124,8 @@ function tlDigForward()
 	steps = steps + 1
 	
 	updateStats();
+	
+	broadcastLocation()
 end
 
 function tlDigDown()
@@ -92,10 +137,6 @@ end
 function fuelConsumption(length, width, depth)
 	return ((((length + 1)* ((width*2)+2)) + (width*2)+2) * (depth+1))
 end
-
--- lets' move the turtle to the first square
-
--- tlDigForward();
 
 -- start the quarry.
 term.clear();
@@ -118,6 +159,9 @@ term.write("Starting operation in " .. (length + 2) .. "x" .. (depth+1) .. "x" .
 _term_position=_term_position+1
 term.setCursorPos(1,_term_position);
 updateStats();
+
+-- open rednet connection
+open()
 
 for d = 0, depth do
 
@@ -151,3 +195,6 @@ for d = 0, depth do
 	tlDigDown();
 	
 end
+
+-- close rednet
+close()
