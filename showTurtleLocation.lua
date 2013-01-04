@@ -35,13 +35,13 @@ end
 
 open()
 
-function updateScreen(ux,uy,uz,ufuel,e,ustage)
-	e2 = ""
-	if ux == nil then ux = "?" e[2]="Data x failure" end
-	if uy == nil then uy = "?" e[2]="Data y failure"  end
-	if uz == nil then uz = "?" e[2]="Data z failure"  end
-	if ufuel == nil then ufuel = "?" e[2]="Data f failure"  end
-	if ustage == nil then ustage = "?" e[2]="Data s failure"  end
+function updateScreen(ux,uy,uz,ufuel,e,e2)
+	if ux == nil then ux = "?"  print("data x fail") end
+	if uy == nil then uy = "?"  print("data y fail") end
+	if uz == nil then uz = "?"  print("data z fail") end
+	if ufuel == nil then 
+		ufuel = "?" print("data f fail")
+	end
 
 	m.clear()
 	m.setCursorPos(1,1)
@@ -55,11 +55,11 @@ function updateScreen(ux,uy,uz,ufuel,e,ustage)
 	m.setCursorPos(1,7)
 	m.write("Fuel: " .. ufuel);
 	m.setCursorPos(1,9)
-	m.write("Stage: " .. ustage);
+	m.write("Stage: " .. stage);
 	m.setCursorPos(1,11)
-	m.write(e[1]);	
+	m.write(e);	
 	m.setCursorPos(1,12)
-	m.write(e[2]);
+	m.write(e2);
 	
 	
 	
@@ -69,18 +69,23 @@ while true do
 	senderid, message, distance = rednet.receive(3);
 
 	if senderid == nil then 
-		updateScreen(x.."?",y.."?",z.."?",f.."?",{"Turtle not broadcasting /","                 out of range"}, stage)
+		updateScreen(x.."?",y.."?",z.."?",f.."?","Turtle not broadcasting / " , "                 out of range","")	
 	else
 		t = textutils.unserialize(message)
-		if t ~= nil then
-			x = t[1]
-			y = t[2]
-			z = t[3]
-			f = t[4]
-			stage = t[5]
-			updateScreen(x,y,z,f,"", stage)
+		if message == "PING" then
+			-- gps locator ping
 		else
-			updateScreen(x.."?",y.."?",z.."?",f.."?",{"Data decode failure."}, stage)
+			if t ~= nil then
+				x = t[1]
+				y = t[2]
+				z = t[3]
+				f = t[4]
+				stage = t[5] 
+				updateScreen(x,y,z,f,"","")
+			else
+				updateScreen(x.."?",y.."?",z.."?",f.."?","Data decode failure.","")
+				print("data is null: " .. message)
+			end
 		end
 	end
 end
