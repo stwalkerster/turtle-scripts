@@ -1,5 +1,4 @@
 m=peripheral.wrap("top")
-open()
 
 local sOpenedSide = nil
 local function open()
@@ -27,6 +26,8 @@ local function open()
 	return true
 end
 
+open()
+
 function updateScreen(x,y,z,fuel)
 	m.clear()
 	m.setCursorPos(1,1)
@@ -42,12 +43,12 @@ function updateScreen(x,y,z,fuel)
 end
 
 while true do
-	senderid, message, distance = rednet.recieve(3);
+	senderid, message, distance = rednet.receive(3);
 
 	if senderid == nil then 
-		updatescreen("?","?","?","?")
+		updateScreen("?","?","?","?")
 	else
 		t = textutils.unserialize(message)
-		updatescreen(t[1],t[2],t[3],t[4])
+		updateScreen(t[1],t[2],t[3],t[4])
 	end
 end
