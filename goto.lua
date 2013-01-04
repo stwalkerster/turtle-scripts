@@ -2,7 +2,7 @@
 
 local tArgs = { ... }
 if #tArgs < 3 then
-	print( "Usage: cd <path>" )
+	print( "Usage: goto x y z" )
 	return
 end
 
