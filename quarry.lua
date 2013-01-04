@@ -59,27 +59,27 @@ function writeline(data)
 end
 
 function updateStats()
-	term.write("x: ?")
-	term.setCursorPos(1,_term_position+1);
-	term.write("y: ?")
-	term.setCursorPos(1,_term_position+2);
-	term.write("z: ?")
-	term.setCursorPos(1,_term_position+3);
-	term.write("fuel: " .. turtle.getFuelLevel())
-	term.setCursorPos(1,_term_position+4);
-	term.write("steps: " .. steps)
-	term.setCursorPos(1,_term_position);
-end
-
-function broadcastLocation()
 	x, y, z = gps.locate(2,false)
-	if x == nil then
+	f = turtle.getFuelLevel()
+	
+	if x ~= nil then
+		rednet.send(8, textutils.serialize({x,y,z,f}));
+	else
 		x="?"
 		y="?"
 		z="?"
 	end
-	
-	rednet.send(8, textutils.serialize({x,y,z, turtle.getFuelLevel()});
+
+	term.write("x: " .. x)
+	term.setCursorPos(1,_term_position+1);
+	term.write("y: " .. y)
+	term.setCursorPos(1,_term_position+2);
+	term.write("z: " .. z)
+	term.setCursorPos(1,_term_position+3);
+	term.write("fuel: " .. f)
+	term.setCursorPos(1,_term_position+4);
+	term.write("steps: " .. steps)
+	term.setCursorPos(1,_term_position);
 end
 
 function tlDig()	
@@ -124,8 +124,6 @@ function tlDigForward()
 	steps = steps + 1
 	
 	updateStats();
-	
-	broadcastLocation()
 end
 
 function tlDigDown()
