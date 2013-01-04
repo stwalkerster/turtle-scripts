@@ -1,0 +1,16 @@
+m=peripheral.wrap("top")
+m.setCursorPos(1,1)
+m.clear()
+term.clear()
+m.write("CraftOS running | locked")
+local x,y = term.getCursorPos()
+term.setCursorPos(1,y+1)
+write("Please enter password:")
+term.setCursorPos(1,y+2)
+local pass = read("*")
+m.clear()
+m.setCursorPos(1,1)
+m.write("CraftOS running | logged in")
+term.clear();
+term.setCursorPos(1,1)
+
