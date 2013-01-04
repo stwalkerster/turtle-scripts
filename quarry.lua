@@ -1,6 +1,6 @@
 local length = 14; -- how far back to go minus 2
 local width = 7; -- how wide minus 2, div 2
-local depth = 0; -- how many levels minus 1
+local depth = 8; -- how many levels minus 1
 
 local steps = 0;
 
@@ -114,7 +114,7 @@ if fuelConsumption(length, width, depth) > turtle.getFuelLevel() then
 	term.setCursorPos(1,_term_position);
 end
 
-term.write("Starting operation in " .. (length + 2) .. "x" .. depth .. "x" .. ((width*2)+1) .. " area")
+term.write("Starting operation in " .. (length + 2) .. "x" .. (depth+1) .. "x" .. ((width*2)+1) .. " area")
 _term_position=_term_position+1
 term.setCursorPos(1,_term_position);
 updateStats();
