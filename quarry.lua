@@ -3,6 +3,7 @@ local width = 7; -- how wide minus 2, div 2
 local depth = 1; -- how many levels minus 1
 
 local steps = 0;
+local stage = "Quarrying"
 
 local _term_position=1;
 
@@ -63,7 +64,7 @@ function updateStats()
 	f = turtle.getFuelLevel()
 	
 	if x ~= nil then
-		rednet.send(8, textutils.serialize({x,y,z,f}));
+		rednet.send(8, textutils.serialize({x,y,z,f,stage}));
 	else
 		x="?"
 		y="?"
@@ -153,7 +154,7 @@ if fuelConsumption(length, width, depth) > turtle.getFuelLevel() then
 	term.setCursorPos(1,_term_position);
 end
 
-term.write("Starting operation in " .. (length + 2) .. "x" .. (depth+1) .. "x" .. ((width*2)+1) .. " area")
+term.write("Starting operation in " .. (length + 2) .. "x" .. (depth+1) .. "x" .. ((width*2)+2) .. " area")
 _term_position=_term_position+1
 term.setCursorPos(1,_term_position);
 updateStats();
@@ -162,6 +163,8 @@ updateStats();
 open()
 
 for d = 0, depth do
+
+	stage = "Quarrying (" .. (d+1) .. "/" .. (depth+1) .. ")"
 
 	for w = 0, width do
 		

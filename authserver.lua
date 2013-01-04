@@ -8,7 +8,7 @@ local modemSide = "back" -- change to the side of the computer your modem is on
 local valid = false
 users = {"serverroomdoor", "workstation" } --make sure users and passwords line up
 passwords = {"letmein", "stwalkerster" }
-senders = { 0, 1, 2, 3, 4 } -- computer ID's of the computers you want to accept requests from
+senders = { 0, 1, 2, 3, 9 } -- computer ID's of the computers you want to accept requests from
 function bootUp()
  rednet.open(modemSide)
 end
