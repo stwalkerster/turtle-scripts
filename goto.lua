@@ -2,10 +2,11 @@
 
 local tArgs = { ... }
 if #tArgs < 3 then
-	print( "Usage: cd <path>" )
+	print( "Usage: goto x y z" )
 	return
 end
 
+local stage = "Going to Location"
 local targetx = tArgs[1]
 local targety = tArgs[2]
 local targetz = tArgs[3]
@@ -39,6 +40,16 @@ end
 function close()
 	if sOpenedSide then
 		rednet.close( sOpenedSide )
+	end
+end
+
+
+function updateLocation()
+	x, y, z = gps.locate(2,false)
+	f = turtle.getFuelLevel()
+	
+	if x ~= nil then
+		rednet.send(8, textutils.serialize({x,y,z,f,stage}));
 	end
 end
 
@@ -81,24 +92,28 @@ end
 
 
 if not open() then return end
-local orientation = getOrientation()
 local myx, myy, myz = gps.locate(2, false)
-close()
 
-local dx = targetx - myx
 local dy = targety - myy
-local dz = targetz - myz
 
 -- sort out y
 if dy > 0 then
 	-- go up
 	dy = dy
-	for y = 1 , dy do turtle.up() end
+	for y = 1 , dy do turtle.up() updateLocation() end
 elseif dy < 0 then
 	-- go down
 	dy = math.abs(dy)
-	for y = 1 , dy do turtle.down() end
+	for y = 1 , dy do turtle.down() updateLocation() end
 end
+
+
+local orientation = getOrientation()
+myx, myy, myz = gps.locate(2, false)
+dx = targetx - myx
+dz = targetz - myz
+
+
 
 -- standardise our orientation
 if orientation == 1 then
@@ -124,11 +139,11 @@ end
 if dx > 0 then
 	-- go forward
 	dx = dx
-	for x = 1 , dx do turtle.forward() end
+	for x = 1 , dx do turtle.forward() updateLocation() end
 elseif dx < 0 then
 	-- go back
 	dx = math.abs(dx)
-	for x = 1 , dx do turtle.back() end
+	for x = 1 , dx do turtle.back() updateLocation() end
 end
 
 -- turning right will inc z
@@ -138,11 +153,22 @@ turtle.turnRight()
 if dz > 0 then
 	-- go forward
 	dz = dz
-	for z = 1 , dz do turtle.forward() end
+	for z = 1 , dz do turtle.forward() updateLocation() end
 elseif dz < 0 then
 	-- go back
 	dz = math.abs(dz)
-	for z = 1 , dz do turtle.back() end
+	for z = 1 , dz do turtle.back() updateLocation() end
 end
 
-print( "o:" .. orientation .. " dx:" .. dx .. " dy:" .. dy .. " dz:" .. dz)
+
+myx, myy, myz = gps.locate(2, false)
+dx = targetx - myx
+dz = targetz - myz
+dy = targety - myy
+
+if dx ~= 0 or dy ~= 0 or dz ~= 0 then
+
+	print( "Could not move to location")
+	
+end
+close()

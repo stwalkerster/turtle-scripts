@@ -1,8 +1,9 @@
 local length = 14; -- how far back to go minus 2
 local width = 7; -- how wide minus 2, div 2
-local depth = 2; -- how many levels minus 1
+local depth = 1; -- how many levels minus 1
 
 local steps = 0;
+local stage = "Quarrying"
 
 local _term_position=1;
 
@@ -19,6 +20,38 @@ local _term_position=1;
 	place turtle on the X. ]]
 
 -- various functions to be used
+local sOpenedSide = nil
+local function open()
+	local bOpen, sFreeSide = false, nil
+	for n,sSide in pairs(rs.getSides()) do	
+		if peripheral.getType( sSide ) == "modem" then
+			sFreeSide = sSide
+			if rednet.isOpen( sSide ) then
+				bOpen = true
+				break
+			end
+		end
+	end
+	
+	if not bOpen then
+		if sFreeSide then
+			rednet.open( sFreeSide )
+			sOpenedSide = sFreeSide
+			return true
+		else
+			print( "No modem attached" )
+			return false
+		end
+	end
+	return true
+end
+
+function close()
+	if sOpenedSide then
+		rednet.close( sOpenedSide )
+	end
+end
+
 function writeline(data)
 	term.write(data);
 	term.scroll(1);
@@ -27,13 +60,24 @@ function writeline(data)
 end
 
 function updateStats()
-	term.write("x: ?")
+	x, y, z = gps.locate(2,false)
+	f = turtle.getFuelLevel()
+	
+	if x ~= nil then
+		rednet.send(8, textutils.serialize({x,y,z,f,stage}));
+	else
+		x="?"
+		y="?"
+		z="?"
+	end
+
+	term.write("x: " .. x)
 	term.setCursorPos(1,_term_position+1);
-	term.write("y: ?")
+	term.write("y: " .. y)
 	term.setCursorPos(1,_term_position+2);
-	term.write("z: ?")
+	term.write("z: " .. z)
 	term.setCursorPos(1,_term_position+3);
-	term.write("fuel: " .. turtle.getFuelLevel())
+	term.write("fuel: " .. f)
 	term.setCursorPos(1,_term_position+4);
 	term.write("steps: " .. steps)
 	term.setCursorPos(1,_term_position);
@@ -93,10 +137,6 @@ function fuelConsumption(length, width, depth)
 	return ((((length + 1)* ((width*2)+2)) + (width*2)+2) * (depth+1))
 end
 
--- lets' move the turtle to the first square
-
--- tlDigForward();
-
 -- start the quarry.
 term.clear();
 term.setCursorPos(1,_term_position);
@@ -114,12 +154,17 @@ if fuelConsumption(length, width, depth) > turtle.getFuelLevel() then
 	term.setCursorPos(1,_term_position);
 end
 
-term.write("Starting operation in " .. (length + 2) .. "x" .. (depth+1) .. "x" .. ((width*2)+1) .. " area")
+term.write("Starting operation in " .. (length + 2) .. "x" .. (depth+1) .. "x" .. ((width*2)+2) .. " area")
 _term_position=_term_position+1
 term.setCursorPos(1,_term_position);
 updateStats();
 
+-- open rednet connection
+open()
+
 for d = 0, depth do
+
+	stage = "Quarrying (" .. (d+1) .. "/" .. (depth+1) .. ")"
 
 	for w = 0, width do
 		
@@ -151,3 +196,6 @@ for d = 0, depth do
 	tlDigDown();
 	
 end
+
+-- close rednet
+close()
