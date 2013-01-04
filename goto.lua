@@ -81,13 +81,9 @@ end
 
 
 if not open() then return end
-local orientation = getOrientation()
 local myx, myy, myz = gps.locate(2, false)
-close()
 
-local dx = targetx - myx
 local dy = targety - myy
-local dz = targetz - myz
 
 -- sort out y
 if dy > 0 then
@@ -99,6 +95,14 @@ elseif dy < 0 then
 	dy = math.abs(dy)
 	for y = 1 , dy do turtle.down() end
 end
+
+
+local orientation = getOrientation()
+myx, myy, myz = gps.locate(2, false)
+dx = targetx - myx
+dz = targetz - myz
+
+
 
 -- standardise our orientation
 if orientation == 1 then
@@ -145,4 +149,15 @@ elseif dz < 0 then
 	for z = 1 , dz do turtle.back() end
 end
 
-print( "o:" .. orientation .. " dx:" .. dx .. " dy:" .. dy .. " dz:" .. dz)
+
+myx, myy, myz = gps.locate(2, false)
+dx = targetx - myx
+dz = targetz - myz
+dy = targety - myy
+
+if dx ~= 0 or dy ~= 0 or dz ~= 0 then
+
+	print( "Could not move to location")
+	
+end
+close()
