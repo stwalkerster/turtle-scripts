@@ -79,7 +79,7 @@ function broadcastLocation()
 		z="?"
 	end
 	
-	rednet.send(8, textutils.serialize({x,y,z, turtle.getFuelLevel()});
+	rednet.send(8, textutils.serialize({x,y,z, turtle.getFuelLevel()}));
 end
 
 function tlDig()	
