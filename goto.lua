@@ -42,6 +42,16 @@ function close()
 	end
 end
 
+
+function updateLocation()
+	x, y, z = gps.locate(2,false)
+	f = turtle.getFuelLevel()
+	
+	if x ~= nil then
+		rednet.send(8, textutils.serialize({x,y,z,f}));
+	end
+end
+
 function getOrientation()
 	p1x, p1y, p1z = gps.locate(2, false)
 	
@@ -89,11 +99,11 @@ local dy = targety - myy
 if dy > 0 then
 	-- go up
 	dy = dy
-	for y = 1 , dy do turtle.up() end
+	for y = 1 , dy do turtle.up() updateLocation() end
 elseif dy < 0 then
 	-- go down
 	dy = math.abs(dy)
-	for y = 1 , dy do turtle.down() end
+	for y = 1 , dy do turtle.down() updateLocation() end
 end
 
 
@@ -128,11 +138,11 @@ end
 if dx > 0 then
 	-- go forward
 	dx = dx
-	for x = 1 , dx do turtle.forward() end
+	for x = 1 , dx do turtle.forward() updateLocation() end
 elseif dx < 0 then
 	-- go back
 	dx = math.abs(dx)
-	for x = 1 , dx do turtle.back() end
+	for x = 1 , dx do turtle.back() updateLocation() end
 end
 
 -- turning right will inc z
@@ -142,11 +152,11 @@ turtle.turnRight()
 if dz > 0 then
 	-- go forward
 	dz = dz
-	for z = 1 , dz do turtle.forward() end
+	for z = 1 , dz do turtle.forward() updateLocation() end
 elseif dz < 0 then
 	-- go back
 	dz = math.abs(dz)
-	for z = 1 , dz do turtle.back() end
+	for z = 1 , dz do turtle.back() updateLocation() end
 end
 
 
