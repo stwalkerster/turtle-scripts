@@ -4,7 +4,7 @@ rednet.open("back") -- change to the side your rednet modem is on
 while locker do
 	term.clear()
 	term.setCursorPos(1,1)
-	print("Sever Room Access")
+	print("Server Room Access")
 	print("What would you like to do?")
 	print("[1] Open Door")
 	print("[2] Close door")
