@@ -6,6 +6,7 @@ if #tArgs < 3 then
 	return
 end
 
+local stage = "Going to Location"
 local targetx = tArgs[1]
 local targety = tArgs[2]
 local targetz = tArgs[3]
@@ -48,7 +49,7 @@ function updateLocation()
 	f = turtle.getFuelLevel()
 	
 	if x ~= nil then
-		rednet.send(8, textutils.serialize({x,y,z,f}));
+		rednet.send(8, textutils.serialize({x,y,z,f,stage}));
 	end
 end
 

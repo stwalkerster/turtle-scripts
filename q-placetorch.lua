@@ -1,3 +1,5 @@
+local stage = "Updating Lighting"
+
 local sOpenedSide = nil
 local function open()
 	local bOpen, sFreeSide = false, nil
@@ -31,7 +33,7 @@ function updateLocation()
 	f = turtle.getFuelLevel()
 	
 	if x ~= nil then
-		rednet.send(8, textutils.serialize({x,y,z,f}));
+		rednet.send(8, textutils.serialize({x,y,z,f,stage}));
 	end
 end
 
