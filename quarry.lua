@@ -1,8 +1,10 @@
 local length = 14; -- how far back to go minus 2
 local width = 7; -- how wide minus 2, div 2
-local depth = 1; -- how many levels
+local depth = 0; -- how many levels minus 1
 
 local steps = 0;
+
+local _term_position=1;
 
 --[[ area to be mined:
 
@@ -25,18 +27,16 @@ function writeline(data)
 end
 
 function updateStats()
-	local oldx,oldy = term.getCursorPos()
-	
 	term.write("x: ?")
-	term.setCursorPos(1,oldy+1);
+	term.setCursorPos(1,_term_position+1);
 	term.write("y: ?")
-	term.setCursorPos(1,oldy+2);
+	term.setCursorPos(1,_term_position+2);
 	term.write("z: ?")
-	term.setCursorPos(1,oldy+3);
+	term.setCursorPos(1,_term_position+3);
 	term.write("fuel: " .. turtle.getFuelLevel())
-	term.setCursorPos(1,oldy+4);
+	term.setCursorPos(1,_term_position+4);
 	term.write("steps: " .. steps)
-	term.setCursorPos(1,oldy);
+	term.setCursorPos(1,_term_position);
 end
 
 function tlDig()	
@@ -90,7 +90,7 @@ function tlDigDown()
 end
 
 function fuelConsumption(length, width, depth)
-	return ((((length + 1)* ((width*2)+2)) + width) * depth)
+	return ((((length + 1)* ((width*2)+2)) + (width*2)+2) * (depth+1))
 end
 
 -- lets' move the turtle to the first square
@@ -99,16 +99,25 @@ end
 
 -- start the quarry.
 term.clear();
-term.setCursorPos(1,1);
-
-writeline("I will need " .. fuelConsumption(length, width, depth) .. " units of fuel.")
-writeline("I currently have " .. turtle.getFuelLevel() .. " units of fuel.")
-writeline("Starting operation in " .. (length + 2) .. "x" .. depth .. "x" .. ((width*2)+1) .. " area")
+term.setCursorPos(1,_term_position);
+term.write("I will need " .. fuelConsumption(length, width, depth) .. " units of fuel.")
+_term_position=_term_position+1
+term.setCursorPos(1,_term_position);
+term.write("I currently have " .. turtle.getFuelLevel() .. " units of fuel.")
+_term_position=_term_position+1
+term.setCursorPos(1,_term_position);
 
 if fuelConsumption(length, width, depth) > turtle.getFuelLevel() then
 	turtle.refuel()	
-	writeline("After refuelling, I have " .. turtle.getFuelLevel() .. " units of fuel.")
+	term.write("After refuelling, I have " .. turtle.getFuelLevel() .. " units of fuel.")
+	_term_position=_term_position+1
+	term.setCursorPos(1,_term_position);
 end
+
+term.write("Starting operation in " .. (length + 2) .. "x" .. depth .. "x" .. ((width*2)+1) .. " area")
+_term_position=_term_position+1
+term.setCursorPos(1,_term_position);
+updateStats();
 
 for d = 0, depth do
 
