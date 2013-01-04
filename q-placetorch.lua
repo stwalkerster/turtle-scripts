@@ -32,7 +32,7 @@ function updateLocation()
 	
 	if x ~= nil then
 		rednet.send(8, textutils.serialize({x,y,z,f}));
-	else
+	end
 end
 
 turtle.up() updateLocation()
