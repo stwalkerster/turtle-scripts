@@ -1,5 +1,5 @@
 local sOpenedSide = nil
-local function open()
+function open()
 	local bOpen, sFreeSide = false, nil
 	for n,sSide in pairs(rs.getSides()) do	
 		if peripheral.getType( sSide ) == "modem" then

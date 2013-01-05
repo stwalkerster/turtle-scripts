@@ -119,14 +119,13 @@ elseif dz < 0 then
 end
 
 
-myx, myy, myz = gps.locate(2, false)
-dx = targetx - myx
-dz = targetz - myz
-dy = targety - myy
+mynx, myny, mynz = gps.locate(2, false)
+ndx = targetx - mynx
+ndz = targetz - mynz
+ndy = targety - myny
 
-if dx ~= 0 or dy ~= 0 or dz ~= 0 then
+if ndx ~= 0 or ndy ~= 0 or ndz ~= 0 then
 
 	print( "Could not move to location")
 	
 end
-close()
