@@ -1,3 +1,7 @@
+function version()
+	return 1
+end
+
 local sOpenedSide = nil
 function open()
 	local bOpen, sFreeSide = false, nil

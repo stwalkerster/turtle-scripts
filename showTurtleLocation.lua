@@ -51,6 +51,8 @@ function updateScreen(ux,uy,uz,ufuel,e,e2)
 	if ufuel == nil then 
 		ufuel = "?" print("data f fail")
 	end
+	if task == nil then task = "" end
+	if stage == nil then stage = "" end
 
 	m.clear()
 	m.setCursorPos(1,1)
