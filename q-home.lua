@@ -1,5 +1,5 @@
 print("Returning home...")
-shell.run("goto.lua", "214 57 277");
+shell.run("git/goto.lua", "209 58 323");
 turtle.turnLeft()
 
 print("Done! Type 'start' to run me again!")
