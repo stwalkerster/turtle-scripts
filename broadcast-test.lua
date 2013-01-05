@@ -1,4 +1,4 @@
-local stage = "Deploying to quarry"
+local stage = "Broadcast Test"
 
 local sOpenedSide = nil
 local function open()
@@ -28,17 +28,24 @@ end
 
 open()
 
-function updateLocation()
+while true do 
+
+	term.clear()
+	term.setCursorPos(1,1)
+ 	
 	x, y, z = gps.locate(2,false)
 	f = turtle.getFuelLevel()
+	
+	print(x)
+	print(y)
+	print(z)
+	print(f)
+	print(stage)
+	
 	
 	if x ~= nil then
 		rednet.send(8, textutils.serialize({x,y,z,f,stage}));
 	end
-end
-
-turtle.forward();  updateLocation()
-turtle.forward();  updateLocation()
-while not turtle.compare() do turtle.down()  updateLocation() end
-turtle.down();  updateLocation()
-turtle.down();  updateLocation()
+ 
+	sleep(1) 
+ end
