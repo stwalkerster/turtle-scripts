@@ -29,8 +29,15 @@ function updateLocation(stage)
 	x, y, z = gps.locate(2,false)
 	f = turtle.getFuelLevel()
 	
+	task = "-"
+	if fs.exists("task") then
+		h = fs.open("task","r")
+		task = h.readLine()
+		h.close()
+	end
+	
 	if x ~= nil then
-		rednet.send(getControlServer(), textutils.serialize({x,y,z,f,stage}));
+		rednet.send(getControlServer(), textutils.serialize({x,y,z,f,stage,task}));
 	end
 end
 
@@ -39,4 +46,55 @@ function getControlServer()
 	idList["turtle01"] = 8
 	idList["turtle02"] = 11
 	return idList[os.getComputerLabel()]
+end
+
+
+function Dig()	
+	while turtle.detect() do
+		turtle.dig();
+	end
+end
+
+function ReallyDigDown()	
+	while turtle.detectDown() do
+		turtle.digDown();
+	end
+end
+
+function DigForward()
+	moved = turtle.forward();
+	
+
+	while not moved do
+		if turtle.detect() then
+			-- block in my way
+			Dig();
+			moved = turtle.forward()
+		elseif turtle.getFuelLevel() == 0 then
+			-- out of fuel
+			turtle.select(1);
+			turtle.refuel();
+			if turtle.getFuelLevel() == 0 then
+				writeline("Please refuel me!");
+				while turtle.getFuelLevel() == 0 do
+					turtle.refuel();
+				end
+			end
+			
+			moved = turtle.forward();
+		else
+			-- player / npc?
+			moved = turtle.forward();
+		end
+	end
+	
+	steps = steps + 1
+	
+	updateStats();
+end
+
+function DigDown()
+	while not turtle.down() do
+		ReallyDigDown();
+	end
 end
