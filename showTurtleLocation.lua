@@ -1,4 +1,11 @@
-m=peripheral.wrap("top")
+local tArgs = { ... }
+if #tArgs < 2 then
+	print( "Usage: showloc <turtlename> <monitorlocation>" )
+	return
+end
+local turtleName = tArgs[1]
+
+m=peripheral.wrap(tArgs[2])
 
 local x,y,z,f,stage
 x=""
@@ -45,7 +52,7 @@ function updateScreen(ux,uy,uz,ufuel,e,e2)
 
 	m.clear()
 	m.setCursorPos(1,1)
-	m.write("turtle01 - Current Position");
+	m.write( turtleName .. " - Current Position");
 	m.setCursorPos(1,3)
 	m.write("X: " .. ux);
 	m.setCursorPos(1,4)
