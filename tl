@@ -1,0 +1,42 @@
+local sOpenedSide = nil
+local function open()
+	local bOpen, sFreeSide = false, nil
+	for n,sSide in pairs(rs.getSides()) do	
+		if peripheral.getType( sSide ) == "modem" then
+			sFreeSide = sSide
+			if rednet.isOpen( sSide ) then
+				bOpen = true
+				break
+			end
+		end
+	end
+	
+	if not bOpen then
+		if sFreeSide then
+			rednet.open( sFreeSide )
+			sOpenedSide = sFreeSide
+			return true
+		else
+			print( "No modem attached" )
+			return false
+		end
+	end
+	return true
+end
+
+function updateLocation(stage)
+	open()
+	x, y, z = gps.locate(2,false)
+	f = turtle.getFuelLevel()
+	
+	if x ~= nil then
+		rednet.send(getControlServer(), textutils.serialize({x,y,z,f,stage}));
+	end
+end
+
+function getControlServer()
+	idList = {}
+	idList["turtle01"] = 8
+	idList["turtle02"] = 11
+	return idList[os.getComputerLabel()]
+end

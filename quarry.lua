@@ -1,5 +1,5 @@
-local length = 14; -- how far back to go minus 2
-local width = 7; -- how wide minus 2, div 2
+local length = 13; -- how far back to go minus 2
+local width = 14; -- how wide minus 2, div 2
 local depth = 1; -- how many levels minus 1
 
 local steps = 0;
@@ -20,37 +20,6 @@ local _term_position=1;
 	place turtle on the X. ]]
 
 -- various functions to be used
-local sOpenedSide = nil
-local function open()
-	local bOpen, sFreeSide = false, nil
-	for n,sSide in pairs(rs.getSides()) do	
-		if peripheral.getType( sSide ) == "modem" then
-			sFreeSide = sSide
-			if rednet.isOpen( sSide ) then
-				bOpen = true
-				break
-			end
-		end
-	end
-	
-	if not bOpen then
-		if sFreeSide then
-			rednet.open( sFreeSide )
-			sOpenedSide = sFreeSide
-			return true
-		else
-			print( "No modem attached" )
-			return false
-		end
-	end
-	return true
-end
-
-function close()
-	if sOpenedSide then
-		rednet.close( sOpenedSide )
-	end
-end
 
 function writeline(data)
 	term.write(data);
@@ -64,7 +33,7 @@ function updateStats()
 	f = turtle.getFuelLevel()
 	
 	if x ~= nil then
-		rednet.send(8, textutils.serialize({x,y,z,f,stage}));
+		rednet.send(tl.getControlServer(), textutils.serialize({x,y,z,f,stage}));
 	else
 		x="?"
 		y="?"
@@ -160,7 +129,7 @@ term.setCursorPos(1,_term_position);
 updateStats();
 
 -- open rednet connection
-open()
+tl.open()
 
 for d = 0, depth do
 
@@ -196,6 +165,3 @@ for d = 0, depth do
 	tlDigDown();
 	
 end
-
--- close rednet
-close()

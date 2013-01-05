@@ -11,48 +11,6 @@ local targetx = tArgs[1]
 local targety = tArgs[2]
 local targetz = tArgs[3]
 
-local sOpenedSide = nil
-local function open()
-	local bOpen, sFreeSide = false, nil
-	for n,sSide in pairs(rs.getSides()) do	
-		if peripheral.getType( sSide ) == "modem" then
-			sFreeSide = sSide
-			if rednet.isOpen( sSide ) then
-				bOpen = true
-				break
-			end
-		end
-	end
-	
-	if not bOpen then
-		if sFreeSide then
-			rednet.open( sFreeSide )
-			sOpenedSide = sFreeSide
-			return true
-		else
-			print( "No modem attached" )
-			return false
-		end
-	end
-	return true
-end
-
-function close()
-	if sOpenedSide then
-		rednet.close( sOpenedSide )
-	end
-end
-
-
-function updateLocation()
-	x, y, z = gps.locate(2,false)
-	f = turtle.getFuelLevel()
-	
-	if x ~= nil then
-		rednet.send(8, textutils.serialize({x,y,z,f,stage}));
-	end
-end
-
 function getOrientation()
 	p1x, p1y, p1z = gps.locate(2, false)
 	
@@ -91,7 +49,7 @@ function getOrientation()
 end
 
 
-if not open() then return end
+if not tl.open() then return end
 local myx, myy, myz = gps.locate(2, false)
 
 local dy = targety - myy
@@ -100,11 +58,11 @@ local dy = targety - myy
 if dy > 0 then
 	-- go up
 	dy = dy
-	for y = 1 , dy do turtle.up() updateLocation() end
+	for y = 1 , dy do turtle.up() tl.updateLocation(stage) end
 elseif dy < 0 then
 	-- go down
 	dy = math.abs(dy)
-	for y = 1 , dy do turtle.down() updateLocation() end
+	for y = 1 , dy do turtle.down() tl.updateLocation(stage) end
 end
 
 
@@ -139,11 +97,11 @@ end
 if dx > 0 then
 	-- go forward
 	dx = dx
-	for x = 1 , dx do turtle.forward() updateLocation() end
+	for x = 1 , dx do turtle.forward() tl.updateLocation(stage) end
 elseif dx < 0 then
 	-- go back
 	dx = math.abs(dx)
-	for x = 1 , dx do turtle.back() updateLocation() end
+	for x = 1 , dx do turtle.back() tl.updateLocation(stage) end
 end
 
 -- turning right will inc z
@@ -153,11 +111,11 @@ turtle.turnRight()
 if dz > 0 then
 	-- go forward
 	dz = dz
-	for z = 1 , dz do turtle.forward() updateLocation() end
+	for z = 1 , dz do turtle.forward() tl.updateLocation(stage) end
 elseif dz < 0 then
 	-- go back
 	dz = math.abs(dz)
-	for z = 1 , dz do turtle.back() updateLocation() end
+	for z = 1 , dz do turtle.back() tl.updateLocation(stage) end
 end
 
 
