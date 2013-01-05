@@ -1,0 +1,1 @@
+print( "This is " .. os.getComputerLabel() )
