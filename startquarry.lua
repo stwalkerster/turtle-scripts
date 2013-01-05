@@ -1,6 +1,3 @@
-shell.setDir("/git")
-os.loadApi("tl");
-
 -- drop to next level
 shell.run("q-deploy.lua")
 
