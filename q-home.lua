@@ -4,4 +4,4 @@ turtle.turnLeft()
 
 print("Done! Type 'start' to run me again!")
 
-tl.updateLocation("Done")
+tl.updateLocation("Ready.")

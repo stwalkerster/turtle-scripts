@@ -165,3 +165,4 @@ for d = 0, depth do
 	tlDigDown();
 	
 end
+tl.updateLocation("Ready.")

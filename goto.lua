@@ -129,3 +129,4 @@ if ndx ~= 0 or ndy ~= 0 or ndz ~= 0 then
 	print( "Could not move to location")
 	
 end
+tl.updateLocation("Ready.")
