@@ -87,10 +87,6 @@ function DigForward()
 			moved = turtle.forward();
 		end
 	end
-	
-	steps = steps + 1
-	
-	updateStats();
 end
 
 function DigDown()
