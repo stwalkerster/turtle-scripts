@@ -69,17 +69,21 @@ end
 
 function tlAllowedDig()
 	
-	--[[
-	-- redstone
-	turtle.select(1)
-	if turtle.compare() then return false end
-	-- lapis
-	turtle.select(2)
-	if turtle.compare() then return false end
-	-- diamond
-	turtle.select(3)
-	if turtle.compare() then return false end
-	--]]
+	if y < 32 then
+		-- lapis
+		turtle.select(2)
+		if turtle.compare() then return false end
+
+		if y < 16 then
+			-- redstone
+			turtle.select(1)
+			if turtle.compare() then return false end
+			-- diamond
+			turtle.select(3)
+			if turtle.compare() then return false end
+
+		end
+	end
 
 	-- coal
 	turtle.select(4)
