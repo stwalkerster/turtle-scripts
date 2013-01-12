@@ -2,6 +2,12 @@
 homex, homey, homez = gps.locate(2)
 
 while turtle.getFuelLevel() > 1000 do
+	nx, ny, nz = gps.locate(2)
+	if nx ~= homex or ny ~= homey or nz ~= homez then
+		print("Not at start, aborting.");
+		break
+	end
+
 	shell.run("git/q-deploy.lua")
 
 	shell.run("git/quarry.lua")
