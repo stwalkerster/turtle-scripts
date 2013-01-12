@@ -10,7 +10,7 @@ while turtle.getFuelLevel() > 1000 do
 
 	print("Updating lighting...")
 	-- update lighting
-	shell.run("q-placetorch.lua")
+	shell.run("git/q-placetorch.lua")
 
 	shell.run("git/q-home.lua",  homex .. " " .. homey .. " " .. homez);
 end
