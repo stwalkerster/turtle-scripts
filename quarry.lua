@@ -7,6 +7,8 @@ local stage = "Quarrying"
 
 local _term_position=1;
 
+local x,y,z = gps.locate(2,false)
+
 --[[ area to be mined:
 
 	****************
