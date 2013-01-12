@@ -42,7 +42,7 @@ function updateStats()
 end
 
 function fuelConsumption(length, width, depth)
-	return ((((length + 1)* ((width*2)+2)) + (width*2)+2) * (depth+1))
+	return ((((length + 1)* ((width*2)+2)) + (width*2)+2) )
 end
 
 -- start the quarry.
@@ -74,11 +74,14 @@ totalcols = (width * length)+1
 pos=1
 
 function tlDigForward()
+	--turtle.forward();
 	tl.DigForward()
 	tl.updateLocation(stage)
 end
 
 function doColumn()
+	if true then return end
+
 	loop = true
 	local x,origy,z = gps.locate(2,false)
 	local y
@@ -86,12 +89,12 @@ function doColumn()
 	while loop do
 		if turtle.detectDown() then
 			if turtle.digDown() then
-				while not turtle.down() tl.updateLocation("Column " .. pos .. " of " .. totalcols) do end
+				while not turtle.down() do tl.updateLocation("Column " .. pos .. " of " .. totalcols) end
 			else
 				break
 			end
 		else
-			while not turtle.down() tl.updateLocation("Column " .. pos .. " of " .. totalcols) do end
+			while not turtle.down() do tl.updateLocation("Column " .. pos .. " of " .. totalcols) end
 		end
 		
 		x,y,z=gps.locate(2,false);
@@ -114,19 +117,20 @@ end
 
 turtle.up() tl.updateLocation(stage)
 
-for w = 1, (math.floor(width/2)-1) do
-	
-	for l = 1, (length-1) do
+rows = math.floor(width/2)
+
+for w = 1, rows do
+	for l = 1, length-1 do
 		doColumn() tlDigForward(); 
 	end
 
 	turtle.turnRight();
 	doColumn() tlDigForward();
 	turtle.turnRight();
-
-	for l = (1, length-1) do
+ 
+	for l = 1, length-1 do
 		doColumn() tlDigForward();
-	end n
+	end
 
 	turtle.turnLeft();
 	doColumn() tlDigForward();
@@ -136,7 +140,7 @@ end
 -- return to start
 
 turtle.turnLeft();
-for w = 1, (width-1) do
+for w = 1, width do
 	tlDigForward();
 end
 

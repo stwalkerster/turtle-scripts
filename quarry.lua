@@ -1,6 +1,6 @@
 local length = 13; -- how far back to go minus 2
 local width = 14; -- how wide minus 2, div 2
-local depth = 1; -- how many levels minus 1
+local depth = 0; -- how many levels minus 1
 
 local steps = 0;
 local stage = "Quarrying"
@@ -52,10 +52,34 @@ function updateStats()
 	term.setCursorPos(1,_term_position);
 end
 
-function tlDig()	
+function tlDig()
+	local oldstage = stage
 	while turtle.detect() do
-		turtle.dig();
+		if tlAllowedDig() then
+			stage = oldstage
+			turtle.dig();
+		else
+			stage = "ERR: Not allowed to mine"
+			updateStats()
+		end
 	end
+end
+
+function tlAllowedDig()
+	-- redstone
+	turtle.select(1)
+	if turtle.compare() then return false end
+	-- lapis
+	turtle.select(2)
+	if turtle.compare() then return false end
+	-- diamond
+	turtle.select(3)
+	if turtle.compare() then return false end
+	-- coal
+	turtle.select(4)
+	if turtle.compare() then return false end
+	
+	return true
 end
 
 function tlReallyDigDown()	
