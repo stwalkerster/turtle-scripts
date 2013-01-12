@@ -1,8 +1,8 @@
-local length = 13; -- how far back to go minus 2
-local width = 14; -- how wide minus 2, div 2
+local length = 14; -- how far back to go minus 2
+local width = 7; -- how wide minus 2, div 2
 local depth = 0; -- how many levels minus 1
 
-local steps = 0;
+local steps = 1;
 local stage = "Quarrying"
 
 local _term_position=1;
@@ -66,6 +66,8 @@ function tlDig()
 end
 
 function tlAllowedDig()
+	
+	--[[
 	-- redstone
 	turtle.select(1)
 	if turtle.compare() then return false end
@@ -75,6 +77,8 @@ function tlAllowedDig()
 	-- diamond
 	turtle.select(3)
 	if turtle.compare() then return false end
+	--]]
+
 	-- coal
 	turtle.select(4)
 	if turtle.compare() then return false end
